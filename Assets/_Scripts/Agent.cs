@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using WeaponSystem;
 
 public class Agent : MonoBehaviour
 {
@@ -12,12 +14,19 @@ public class Agent : MonoBehaviour
     public AgentAnimation animationManager;
     public AgentRenderer agentRenderer;
     public GroundDetector groundDetector;
+    public ClimbingDetector climbingDetector;
 
     public State curretSate = null, previousState = null;
     public State IdleState;
 
+    [HideInInspector]
+    public AgentWeaponManager agentWeapon;
+
     [Header("State debugging:")]
     public string stateName = "";
+
+    [field: SerializeField]
+    private UnityEvent OnRespawnRequired { get; set; }
 
     private void Awake()
     {
@@ -26,12 +35,19 @@ public class Agent : MonoBehaviour
         animationManager = GetComponentInChildren<AgentAnimation>();
         agentRenderer = GetComponentInChildren<AgentRenderer>();
         groundDetector = GetComponentInChildren<GroundDetector>();
+        climbingDetector = GetComponentInChildren<ClimbingDetector>();
+        agentWeapon = GetComponentInChildren<AgentWeaponManager>();
 
         State[] states = GetComponentsInChildren<State>();
         foreach (var state in states)
         {
             state.InitializeState(this);
         }
+    }
+
+    public void AgentDied()
+    {
+        OnRespawnRequired?.Invoke();
     }
 
     private void Start()

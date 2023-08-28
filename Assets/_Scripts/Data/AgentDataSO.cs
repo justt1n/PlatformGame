@@ -16,4 +16,9 @@ public class AgentDataSO : ScriptableObject
     public float jumpForce = 12;
     public float lowJumpMultiplier = 2;
     public float gravityModifier = 0.5f;
+
+    [Header("Climb data")]
+    [Space]
+    public float climbHorizontalSpeed = 2;
+    public float climbVecticalSpeed = 5;
 }
