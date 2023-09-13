@@ -16,7 +16,7 @@ public class Agent : MonoBehaviour
     public GroundDetector groundDetector;
     public ClimbingDetector climbingDetector;
 
-    public State curretSate = null, previousState = null;
+    public State currentState = null, previousState = null;
     public State IdleState;
 
     [HideInInspector]
@@ -60,12 +60,12 @@ public class Agent : MonoBehaviour
     {
         if (desiredState == null)
             return;
-        if (curretSate != null)
-            curretSate.Exit();
+        if (currentState != null)
+            currentState.Exit();
 
-        previousState = curretSate;
-        curretSate = desiredState;
-        curretSate.Enter();
+        previousState = currentState;
+        currentState = desiredState;
+        currentState.Enter();
 
         DisplayState();
 
@@ -73,21 +73,21 @@ public class Agent : MonoBehaviour
 
     private void DisplayState()
     {
-        if(previousState == null || previousState.GetType() != curretSate.GetType())
+        if(previousState == null || previousState.GetType() != currentState.GetType())
         {
-            stateName = curretSate.GetType().ToString();
+            stateName = currentState.GetType().ToString();
         }
     }
 
     private void Update()
     {
 
-        curretSate.StateUpdate();
+        currentState.StateUpdate();
     }
 
     private void FixedUpdate()
     {
         groundDetector.CheckIsGrounded();
-        curretSate.StateFixedUpdate();
+        currentState.StateFixedUpdate();
     }
 }
